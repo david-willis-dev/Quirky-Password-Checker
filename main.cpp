@@ -3,33 +3,31 @@
 #include <string>
 using namespace std;
 
-
-string* readFile()
+string* readFile(string filename)
 {
-    // Read in input file (all the passwords) and store into an array (0 = first in txt, and array.size-1 = last)
-    string password;
-    string passwordArray[100000];
+	cout << "here" << endl;
+	// Read in input file (all the passwords) and store into an array (0 = first in txt, and array.size-1 = last)
+	string password;
+	string* passwordArray = new string[100000];
+	ifstream file(filename);
 
-    ifstream file("input.txt");
-
-    if (file.is_open())
-    {
-        // Only loop while there are lines (passwords) to be read:
-        for(int i = 0; i < 100000; i++)
-        {
-            getline(file, password);
-            // Add to the array of passwords
-            passwordArray[i] = password;
-        }
-        file.close();
-    }
-
-    for (int i = 0; i < 100000; i++)
-    {
-        cout << password.at(i) << endl;
-    }
-
-
+	if (file.is_open())
+	{
+		// Only loop while there are lines (passwords) to be read:
+		for(int i = 0; i < 100000; i++)
+		{
+			getline(file, password);
+			// Add to the array of passwords
+			passwordArray[i] = password;
+		}
+		file.close();
+	}
+	else
+		cout << "File was not opened" << endl;
+	
+	for(int i = 0; i < 10; i++)
+		cout << "Passsword " << i * 1000 << ": " << passwordArray[i * 1000] << endl;
+	return passwordArray;
 }
 
 /// NOTE: temporary functions below, would be easier to separate into two classes! Just laying out the ideas here:
@@ -45,11 +43,11 @@ void hashMap(string* passwordArray, string password)
 }
 
 // Menu implementation: User input will be handled within here as well:
-void menu(string& passwordArray)
+void menu(string* passwordArray)
 {
 	int structureChoice;
 	string password;
-    bool exitProgram = false;
+	bool exitProgram = false;
 
 	cout << "Quirky Password Checker" << endl;
 	cout << "===========================" << endl;
@@ -74,14 +72,14 @@ void menu(string& passwordArray)
 		switch (structureChoice)
 		{
 		case 1:
-			redBlackTree(&passwordArray, password);
+			cout << "TODO: Run program with redBlackTree" << endl;
 			break;
 		case 2:
-			hashMap(&passwordArray, password);
+			cout << "TODO: Run program with Hash Map" << endl;
 			break;
 		default:
 			cout << "Incorrect input, try again." << endl;
-            exitProgram = true;
+			exitProgram = true;
 		}
 	}
 }
@@ -89,9 +87,10 @@ void menu(string& passwordArray)
 // Main: Reads input.txt, and calls menu (which calls the structures)
 int main()
 {
-    string *passwordArray = readFile();
+	cout << "In main" << endl;
+	string* passwordArray = readFile("input.txt");
 	// Now that passwords are stored in temporary array via file, show the menu:
-	menu(*passwordArray);
+	menu(passwordArray);
 
 	return 0;
 }
