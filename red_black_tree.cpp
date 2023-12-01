@@ -1,8 +1,4 @@
-/*
-ABBBBBYYYY LOOKKK!!!!!!!!!!
-https://www.programiz.com/dsa/red-black-tree
-*/
-
+// REF: Understanding of red black tree via: https://www.programiz.com/dsa/red-black-tree
 #include <iostream>
 #include <string>
 #include <queue>
@@ -13,7 +9,7 @@ class RBTree {
         // Each Node will be a Key/Value Pair
         // The Tree will Search/Store based on the Key
         // The Key is the Jaro-Value of the Password
-        float jval;
+        float jaroVal;
         // The Value is the given Password
         string pass;
         // Red = true, Black = false
@@ -22,14 +18,14 @@ class RBTree {
         Node *parent, *left, *right;
         // Null node initializer
         Node() {
-            jval = -1;
+            jaroVal = -1;
             pass = "";
             // Null nodes are always black
             color = false;
             parent = left = right = nullptr;
         }
-        Node(float jval, string pass) {
-            this->jval = jval;
+        Node(float jaroVal, string pass) {
+            this->jaroVal = jaroVal;
             this->pass = pass;
             // Always Insert as a Red Node
             color = true;
@@ -42,7 +38,7 @@ class RBTree {
     public:
     // Default Constructor
     RBTree();
-    void insert(const float& jval, const string& pass);
+    void insert(const float& jaroVal, const string& pass);
     void treeUpkeep(Node* n);
     void leftRotate(Node* n);
     void rightRotate(Node* n);
@@ -55,8 +51,9 @@ RBTree::RBTree() {
     root = null;
 }
 
-void RBTree::insert(const float& jval, const string& pass) {
-    Node* n = new Node(jval, pass);
+// Insert a new node into the tree, and upkeep (balance) as needed
+void RBTree::insert(const float& jaroVal, const string& pass) {
+    Node* n = new Node(jaroVal, pass);
     n->left = n->right = null;
     // If root doesn't exist, assign n as new root
     if(root == null) {
@@ -69,16 +66,19 @@ void RBTree::insert(const float& jval, const string& pass) {
     Node* temp = root;
     while(temp != null) {
         parent = temp;
-        if(n->jval < temp->jval) temp = temp->left;
+        if(n->jaroVal < temp->jaroVal) 
+            temp = temp->left;
         else temp = temp->right;
     }
     n->parent = parent;
-    if(n->jval < parent->jval) parent->left = n;
+    if(n->jaroVal < parent->jaroVal) 
+        parent->left = n;
     else parent->right = n;
     // Current Node needs a grandparent for RBTree Balancing
     if(n->parent->parent) treeUpkeep(n);
 }
 
+// Upkeep the tree: (self balancing and recoloring)
 void RBTree::treeUpkeep(Node* n) {
     Node* unc;
     // Balance only if two consecutive Red nodes
@@ -131,30 +131,44 @@ void RBTree::treeUpkeep(Node* n) {
     root->color = false;
 }
 
-void RBTree::leftRotate(Node* n) {
+// Left Rotate:
+void RBTree::leftRotate(Node* n) 
+{
     Node* child = n->right;
     n->right = child->left;
-    if(child->left != null) child->left->parent = n;
+    if(child->left != null) 
+        child->left->parent = n;
     child->parent = n->parent;
     if(n->parent == nullptr) root = child;
-    else if(n == n->parent->left) n->parent->left = child;
-    else n->parent->right = child;
+    else if(n == n->parent->left) 
+        n->parent->left = child;
+    else 
+        n->parent->right = child;
+    // Set left child to n, and then swap n parent to child (rotating!)
     child->left = n;
     n->parent = child;
 }
 
-void RBTree::rightRotate(Node* n) {
+// Right Rotate:
+void RBTree::rightRotate(Node* n) 
+{
     Node* child = n->left;
     n->left = child->right;
-    if(child->right != null) child->right->parent = n;
+    if(child->right != null) 
+        child->right->parent = n;
     child->parent = n->parent;
-    if(n->parent == nullptr) root = child;
-    else if(n == n->parent->right) n->parent->right = child;
-    else n->parent->left = child;
+    if(n->parent == nullptr) 
+        root = child;
+    else if(n == n->parent->right) 
+        n->parent->right = child;
+    else 
+        n->parent->left = child;
+    // Update right child to n value, and then swap n parent to child (rotating!)
     child->right = n;
     n->parent = child;
 }
 
+// Print level order of tree:
 void RBTree::levelPrint() {
     queue<Node*> q;
     Node* temp;
@@ -163,20 +177,23 @@ void RBTree::levelPrint() {
         temp = q.front();
         q.pop();
         cout << temp->pass << " ";
-        if(temp->left != null) q.push(temp->left);
-        if(temp->right != null) q.push(temp->right);
+        if(temp->left != null) 
+            q.push(temp->left);
+        if(temp->right != null) 
+            q.push(temp->right);
     }
 }
 
-int main() {
-    // set precision to 5 decimal points
-    RBTree myTree;
-    myTree.insert(5.5, "a");
-    myTree.insert(4.0, "b");
-    myTree.insert(3.5, "c");
-    myTree.insert(3.0, "d");
-    myTree.insert(2.5, "e");
-    myTree.insert(2.0, "f");
-    myTree.levelPrint();
-    return 0;
-}
+// Main (Was used to test tree efficiency, comment out cause not needed!)
+// int main() {
+//     // Set precision to 5 decimal points to ensure no duplicate jaro's
+//     RBTree myTree;
+//     myTree.insert(5.5, "a");
+//     myTree.insert(4.0, "b");
+//     myTree.insert(3.5, "c");
+//     myTree.insert(3.0, "d");
+//     myTree.insert(2.5, "e");
+//     myTree.insert(2.0, "f");
+//     myTree.levelPrint();
+//     return 0;
+// }
