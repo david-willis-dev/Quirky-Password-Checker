@@ -1,3 +1,8 @@
+/*
+ABBBBBYYYY LOOKKK!!!!!!!!!!
+https://www.programiz.com/dsa/red-black-tree
+*/
+
 #include <iostream>
 #include <string>
 #include <queue>
