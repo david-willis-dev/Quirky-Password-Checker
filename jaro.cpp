@@ -37,6 +37,7 @@ float jaroDistance(string s1, string s2) {
 	
 }
 
+/*
 int main() {
 	fstream inputFile("input.txt", fstream::in);
 	if(!inputFile.is_open())
@@ -48,3 +49,4 @@ int main() {
 	getline(inputFile, s2);
 	cout << "Distance between the strings: " << jaroDistance(s1, s2);
 }
+*/
