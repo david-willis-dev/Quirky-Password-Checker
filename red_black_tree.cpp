@@ -45,8 +45,8 @@ class RBTree {
     void rightRotate(Node* n);
     // Silly Function
     void levelPrint();
-    void postOrder();
-    void postOrderHelper(Node* n);
+    void reverseInOrder();
+    void reverseInOrderHelper(Node* n, int& count, int& limit);
 };
 
 RBTree::RBTree() {
@@ -81,10 +81,15 @@ void RBTree::insert(const float& jaroVal, const string& pass) {
         // Else Traverse Right
         else temp = temp->right;
     }
+    // Once we've reached our destination, update n's parent
     n->parent = parent;
+    // Connect parent node to n
+    // If n's value is less than its parent's, it's the left child
     if(n->jaroVal < parent->jaroVal) parent->left = n;
+    // Else, it's the right child
     else parent->right = n;
     // Current Node needs a grandparent for RBTree Balancing
+    // Tree won't need to be rebalanced with height of 1 or 2
     if(n->parent->parent) treeUpkeep(n);
 }
 
@@ -110,37 +115,52 @@ void RBTree::treeUpkeep(Node* n) {
             }
             // Else uncle is black => rotate
             else {
+                // if n is the left child of its parent
                 if(n == n->parent->left) {
+                    // move pointer to its parent and perform a
+                    // right rotation at the node
                     n = n->parent;
                     rightRotate(n);
                 }
+                // recolor the parent and grandparent nodes
                 n->parent->color = false;
                 n->parent->parent->color = true;
+                // perform a left rotate on n
                 leftRotate(n->parent->parent);
             }
         }
         else {
             // Uncle is right child of grandparent
             unc = n->parent->parent->right;
+            // If uncle is red => flip colors
             if(unc->color) {
+                // Flipping colors of uncle, parent, and grandparent nodes
                 n->parent->color = false;
                 unc->color = false;
                 n->parent->parent->color = true;
+                // Uncle and Parent have been fixed, so move up to grandparent
                 n = n->parent->parent;
             }
+            // Else uncle is black => rotate
             else {
+                // if n is the right child of its parent
                 if(n == n->parent->right) {
+                    // move pointer to its parent and perform a
+                    // left rotation at the node
                     n = n->parent;
                     leftRotate(n);
                 }
+                // recolor the parent and grandparent nodes
                 n->parent->color = false;
                 n->parent->parent->color = true;
+                // perform a right rotate on n
                 rightRotate(n->parent->parent);
             }
         }
         // If we've reached the top of the tree (root) stop
         if(n == root) break;
     }
+    // Ensure root is still colored black
     root->color = false;
 }
 
@@ -212,14 +232,16 @@ void RBTree::levelPrint() {
 }
 
 // Print In Order Traversal of tree:
-void RBTree::postOrder() {
-    postOrderHelper(root);
+void RBTree::reverseInOrder() {
+    int count = 0, limit = 100;
+    reverseInOrderHelper(root, count, limit);
+    cout << endl;
 }
 // Helper function for inOrder Print
-void RBTree::postOrderHelper(Node* n) {
-    if(n->right != nullNode) postOrderHelper(n->right);
-    cout << n->jaroVal << " ";
-    if(n->left != nullNode) postOrderHelper(n->left);
+void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
+    if(n->right != nullNode) reverseInOrderHelper(n->right, count, limit);
+    cout << ++count << ": " << n->jaroVal << "\n";
+    if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
 }
 
 // Main (Was used to test tree efficiency, comment out cause not needed!)
@@ -233,6 +255,6 @@ int main() {
     myTree.insert(2.5, "e");
     myTree.insert(2.0, "f");
     myTree.levelPrint();
-    myTree.postOrder();
+    myTree.reverseInOrder();
     return 0;
 }
