@@ -1,4 +1,4 @@
-// REF: Understanding of red black tree via: https://www.programiz.com/dsa/red-black-tree
+// REF: Understanding of red black tree via: https://www.programiz.com/dsa/red-black-tree and via lecture slides (COP3530 University of Florida Fall 2023)
 #include <iostream>
 #include <string>
 #include <queue>
