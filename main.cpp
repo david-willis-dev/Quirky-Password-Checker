@@ -2,6 +2,7 @@
 #include "jaro.cpp" // The Jaro algorithm
 #include "red_black_tree.cpp" // The Red-Black Tree
 #include <string>
+#include <ctime>
 #define MAX_SIZE 100000
 using namespace std;
 
@@ -46,11 +47,15 @@ string* readFile(string filename)
 // Output the similar passwords, and only exit output if certain escape key is pressed (e?). Output calculation time until the escape was pressed.
 void redBlackTree(string* passwordArray, string password)
 {
+	clock_t t;
 	cout << "Red - Black Tree" << endl;
+	t = clock();
 	RBTree myTree;
 	for(int i = 0; i < MAX_SIZE; i++)
 		myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i]);
+	t = clock() - t;
 	cout << "Tree Filled" << endl;
+	cout << "It took " << t << " clicks" << endl;
 	myTree.reverseInOrder();
 }
 void hashMap(string* passwordArray, string password)
@@ -78,10 +83,11 @@ void menu(string* passwordArray)
 		cin >> structureChoice;
 
 		// Check if need to exit:
-		if (structureChoice != 1 || structureChoice != 2)
+		if (structureChoice != 1 && structureChoice != 2)
 		{
-			cout << "Exiting program." << endl;
+			cout << "Exiting program.";
 			exitProgram = true;
+			continue;
 		}
 		// Otherwise prompt for password:
 		cout << "Input your password: ";
