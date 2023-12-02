@@ -3,6 +3,7 @@
 #include <string>
 #include <queue>
 using namespace std;
+#define MAX_LIMIT 100
 
 class RBTree {
     struct Node {
@@ -36,6 +37,8 @@ class RBTree {
     // Helper node to ensure invalid addresses aren't accessed in opertations
     // Attached to nodes with 0/1 children
     Node* nullNode;
+    // Keeps track of current size of tree
+    unsigned int size;
     public:
     // Default Constructor
     RBTree();
@@ -52,10 +55,13 @@ class RBTree {
 RBTree::RBTree() {
     nullNode = new Node;
     root = nullNode;
+    size = 0;
 }
 
 // Insert a new node into the tree, and upkeep (balance) as needed
 void RBTree::insert(const float& jaroVal, const string& pass) {
+    // Update size of tree
+    ++size;
     // Create new leaf node
     Node* n = new Node(jaroVal, pass);
     // Assign children as null node
@@ -233,15 +239,15 @@ void RBTree::levelPrint() {
 
 // Print In Order Traversal of tree:
 void RBTree::reverseInOrder() {
-    int count = 0, limit = 100;
+    int count = 0, limit = MAX_LIMIT;
     reverseInOrderHelper(root, count, limit);
     cout << endl;
 }
 // Helper function for inOrder Print
 void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
-    if(n->right != nullNode && count <= limit) reverseInOrderHelper(n->right, count, limit);
-    cout << count << ": " << n->pass << n->jaroVal << "\n";
-    if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
+    if(n->right != nullNode) reverseInOrderHelper(n->right, count, limit);
+    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << "\n";
+    if(n->left != nullNode) reverseInOrderHelper(n->left, count, limit);
 }
 
 /*
