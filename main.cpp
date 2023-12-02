@@ -2,7 +2,7 @@
 #include "jaro.cpp" // The Jaro algorithm
 #include "red_black_tree.cpp" // The Red-Black Tree
 #include <string>
-#define MAX_SIZE 1000000
+#define MAX_SIZE 100000
 using namespace std;
 
 /*
@@ -19,13 +19,13 @@ string* readFile(string filename)
 	cout << "here" << endl;
 	// Read in input file (all the passwords) and store into an array (0 = first in txt, and array.size-1 = last)
 	string password;
-	string* passwordArray = new string[1000000];
+	string* passwordArray = new string[100000];
 	ifstream file(filename);
 
 	if (file.is_open())
 	{
 		// Only loop while there are lines (passwords) to be read:
-		for(int i = 0; i < 1000000; i++)
+		for(int i = 0; i < 100000; i++)
 		{
 			getline(file, password);
 			// Add to the array of passwords
@@ -74,16 +74,19 @@ void menu(string* passwordArray)
 		cout << "Pick your data structure (type 1 or 2):" << endl;
 		cout << "1. Red-Black Tree" << endl; /// Red-black tree is subject to change to a different structure!
 		cout << "2. Hash Map" << endl;
-		cout << "3. Exit Program" << endl;
+		cout << "Type any other key to exit program." << endl;
 		cin >> structureChoice;
 
 		// Check if need to exit:
-		if (structureChoice == 3)
+		if (structureChoice != 1 || structureChoice != 2)
+		{
+			cout << "Exiting program.";
 			exitProgram = true;
-
+		}
 		// Otherwise prompt for password:
 		cout << "Input your password: ";
 		cin >> password;
+		cout << endl;
 
 		switch (structureChoice)
 		{
@@ -96,7 +99,6 @@ void menu(string* passwordArray)
 		default:
 			cout << "Incorrect input, try again." << endl;
 			exitProgram = true;
-			break;
 		}
 	}
 }
@@ -108,5 +110,6 @@ int main()
 	string* passwordArray = readFile("input.txt");
 	// Now that passwords are stored in temporary array via file, show the menu:
 	menu(passwordArray);
+
 	return 0;
 }
