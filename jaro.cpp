@@ -15,10 +15,11 @@ float jaroDistance(string s1, string s2) {
 	if (s1.length() < s2.length())
 		swap(s1, s2);
 	searchableDistance = (s1.length() / 2) - 1;
-	// Any characters counted in a match can only be counted once, so wer keep track of them in a set
+	// Any characters counted in a match can only be counted once, so we keep track of them in a set
 	unordered_set<int> matchedIndices;
 	//This is the execution of the algorithm
-	for(int i = 0; i < min(s1.length(), s2.length() + searchableDistance); i++) {
+	int greatestIndex = min(s1.length(), s2.length() + searchableDistance);
+	for(int i = 0; i < greatestIndex; i++) {
 		// Test to see if there is a match
 		// Find the first unique match
 		for(int j = max(0, i - searchableDistance); j < min(int(s2.length()), i + searchableDistance + 1); j++) {
@@ -33,13 +34,15 @@ float jaroDistance(string s1, string s2) {
 		}
 	}
 	// Calculate and return the Jaro Distance
-	return  (1.0 / 3) * (float(m) / s1.length() + float(m) / s2.length() + (float(m) - t/2.0) / m);
-	
+	float jaro = 0;
+	if (m != 0)
+		jaro = (1.0 / 3) * (float(m) / s1.length() + float(m) / s2.length() + (float(m) - t/2.0) / m);
+	return jaro;
 }
 
 /*
 int main() {
-	fstream inputFile("input.txt", fstream::in);
+	fstream inputFile("input2.txt", fstream::in);
 	if(!inputFile.is_open())
 		throw runtime_error("File not opened correctly");
 		
