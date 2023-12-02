@@ -1,7 +1,18 @@
 // Project 3 - Main 
 #include "jaro.cpp" // The Jaro algorithm
+#include "red_black_tree.cpp" // The Red-Black Tree
 #include <string>
+#define MAX_SIZE 100000
 using namespace std;
+
+/*
+PROGRAM OVERVIEW
+Program is made to check peoples passwords
+1. First read all of a person's passwords with their similarities into a data structure
+2. Print the 100 most similar passwords
+
+
+*/
 
 string* readFile(string filename)
 {
@@ -36,6 +47,11 @@ string* readFile(string filename)
 void redBlackTree(string* passwordArray, string password)
 {
 	cout << "Red - Black Tree" << endl;
+	RBTree myTree;
+	for(int i = 0; i < MAX_SIZE; i++)
+		myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i]);
+	cout << "Tree Filled" << endl;
+	myTree.reverseInOrder();
 }
 void hashMap(string* passwordArray, string password)
 {
@@ -58,21 +74,24 @@ void menu(string* passwordArray)
 		cout << "Pick your data structure (type 1 or 2):" << endl;
 		cout << "1. Red-Black Tree" << endl; /// Red-black tree is subject to change to a different structure!
 		cout << "2. Hash Map" << endl;
-		cout << "3. Exit Program" << endl;
+		cout << "Type any other key to exit program." << endl;
 		cin >> structureChoice;
 
 		// Check if need to exit:
-		if (structureChoice == 3)
-			exit;
-
+		if (structureChoice != 1 || structureChoice != 2)
+		{
+			cout << "Exiting program."
+			exitProgram = true;
+		}
 		// Otherwise prompt for password:
 		cout << "Input your password: ";
 		cin >> password;
+		cout << endl;
 
 		switch (structureChoice)
 		{
 		case 1:
-			cout << "TODO: Run program with redBlackTree" << endl;
+			redBlackTree(passwordArray, password);
 			break;
 		case 2:
 			cout << "TODO: Run program with Hash Map" << endl;
