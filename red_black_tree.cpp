@@ -3,6 +3,7 @@
 #include <string>
 #include <queue>
 using namespace std;
+#define MAX_LIMIT 100
 
 class RBTree {
     struct Node {
@@ -36,6 +37,8 @@ class RBTree {
     // Helper node to ensure invalid addresses aren't accessed in opertations
     // Attached to nodes with 0/1 children
     Node* nullNode;
+    // Keeps track of current size of tree
+    unsigned int size;
     public:
     // Default Constructor
     RBTree();
@@ -52,10 +55,13 @@ class RBTree {
 RBTree::RBTree() {
     nullNode = new Node;
     root = nullNode;
+    size = 0;
 }
 
 // Insert a new node into the tree, and upkeep (balance) as needed
 void RBTree::insert(const float& jaroVal, const string& pass) {
+    // Update size of tree
+    ++size;
     // Create new leaf node
     Node* n = new Node(jaroVal, pass);
     // Assign children as null node
@@ -214,6 +220,7 @@ void RBTree::rightRotate(Node* n)
     child->right = n;
 }
 
+/*
 // Print level order of tree:
 void RBTree::levelPrint() {
     queue<Node*> q;
@@ -230,17 +237,26 @@ void RBTree::levelPrint() {
     }
     cout << endl;
 }
+*/
 
 // Print In Order Traversal of tree:
 void RBTree::reverseInOrder() {
-    int count = 0, limit = 100;
+    // Initializing values to be passed into helper print function
+    int count = 0, limit = MAX_LIMIT;
     reverseInOrderHelper(root, count, limit);
     cout << endl;
 }
 // Helper function for inOrder Print
+// Print from the largest to smallest jaro values
 void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
+    // If right child is not a null node (empty tree), traverse right
+    // Only traverse the number of nodes we need to (limit)
     if(n->right != nullNode && count <= limit) reverseInOrderHelper(n->right, count, limit);
-    cout << count << ": " << n->pass << n->jaroVal << "\n";
+    // Print nodes current count, password, and jaro value
+    // Only print as many as specified by limit
+    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << "\n";
+    // If left child is not a null node (empty tree), traverse left
+    // Only traverse the number of nodes we need to (limit)
     if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
 }
 
