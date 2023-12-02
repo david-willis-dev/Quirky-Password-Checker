@@ -80,7 +80,7 @@ void menu(string* passwordArray)
 		// Check if need to exit:
 		if (structureChoice != 1 || structureChoice != 2)
 		{
-			cout << "Exiting program."
+			cout << "Exiting program." << endl;
 			exitProgram = true;
 		}
 		// Otherwise prompt for password:
