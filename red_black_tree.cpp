@@ -220,6 +220,7 @@ void RBTree::rightRotate(Node* n)
     child->right = n;
 }
 
+/*
 // Print level order of tree:
 void RBTree::levelPrint() {
     queue<Node*> q;
@@ -236,18 +237,27 @@ void RBTree::levelPrint() {
     }
     cout << endl;
 }
+*/
 
 // Print In Order Traversal of tree:
 void RBTree::reverseInOrder() {
+    // Initializing values to be passed into helper print function
     int count = 0, limit = MAX_LIMIT;
     reverseInOrderHelper(root, count, limit);
     cout << endl;
 }
 // Helper function for inOrder Print
+// Print from the largest to smallest jaro values
 void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
-    if(n->right != nullNode) reverseInOrderHelper(n->right, count, limit);
+    // If right child is not a null node (empty tree), traverse right
+    // Only traverse the number of nodes we need to (limit)
+    if(n->right != nullNode && count <= limit) reverseInOrderHelper(n->right, count, limit);
+    // Print nodes current count, password, and jaro value
+    // Only print as many as specified by limit
     if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << "\n";
-    if(n->left != nullNode) reverseInOrderHelper(n->left, count, limit);
+    // If left child is not a null node (empty tree), traverse left
+    // Only traverse the number of nodes we need to (limit)
+    if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
 }
 
 /*
