@@ -3,7 +3,7 @@
 #include <string>
 // #include <queue>
 using namespace std;
-#define MAX_LIMIT 10
+#define MAX_LIMIT 100
 
 class RBTree {
     struct Node {
@@ -46,9 +46,9 @@ class RBTree {
     // Default Constructor
     RBTree();
     // Deconstructor
-    // ~RBTree();
+    ~RBTree();
     // Deconstructor Helper Function
-    // void deleteTree(Node* n);
+    void deleteTree(Node* n);
     // Main Methods
     // Inserts new node into tree
     void insert(const float& jaroVal, const string& pass, const int& origin);
@@ -65,44 +65,43 @@ class RBTree {
     }
     // Silly Functions
     // void levelPrint();
+    // Prints reverse inorder traversal of tree
     void reverseInOrder();
+    // Helper function for reverseInOrder()
     void reverseInOrderHelper(Node* n, int& count, int& limit);
 };
 
+// Default Constructor
 RBTree::RBTree() {
     nullNode = new Node;
+    // Assigns root as a null node
     root = nullNode;
+    // Initializes size of tree to 0
     size = 0;
 }
 
-/*
+// Deletes each node in the tree
 RBTree::~RBTree() {
     deleteTree(root);
-    delete nullNode;
-    cout << "Deconstructed!" << endl;
 }
-*/
 
-/*
+// Deletes tree in post order traversal
 void RBTree::deleteTree(Node* n) {
-    if(!root) return;
-    if(size == 1)
-    {
+    // If tree doesn't exist, don't delete
+    if(size > 0) {
+        // If tree left doesn't exist (or is null node), don't traverse
+        if(n->left != nullNode && n->left) {
+            deleteTree(n->left);
+        }
+        // If tree right doesn't exist (or is null node), don't traverse
+        if(n->right != nullNode && n->right) {
+            deleteTree(n->right);
+        }
+        // Decrease size of tree and delete current node
+        --size;
         delete n;
-        size--;
-        return;
     }
-
-    if(n->left != nullNode && n->left) {
-        deleteTree(n->left);
-    }
-    if(n->right != nullNode && n->right) {
-        deleteTree(n->right);
-    }
-    --size;
-    delete n;
 }
-*/
 
 // Insert a new node into the tree, and upkeep (balance) as needed
 void RBTree::insert(const float& jaroVal, const string& pass, const int& origin) {
@@ -300,8 +299,7 @@ void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
     if(n->right != nullNode && count <= limit) reverseInOrderHelper(n->right, count, limit);
     // Print nodes current count, password, and jaro value
     // Only print as many as specified by limit
-    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << "\n";
-	// << ", origin: " << n->origin << "\n";
+    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << ", origin: " << n->origin << "\n";
     // If left child is not a null node (empty tree), traverse left
     // Only traverse the number of nodes we need to (limit)
     if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
@@ -320,7 +318,7 @@ int main() {
     myTree.insert(2.0, "f", -1);
     // myTree.levelPrint();
     myTree.reverseInOrder();
-    // myTree.~RBTree();
+    myTree.~RBTree();
     return 0;
 }
 */
