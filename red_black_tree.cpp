@@ -300,7 +300,8 @@ void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
     if(n->right != nullNode && count <= limit) reverseInOrderHelper(n->right, count, limit);
     // Print nodes current count, password, and jaro value
     // Only print as many as specified by limit
-    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << ", origin: " << n->origin << "\n";
+    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << "\n";
+	// << ", origin: " << n->origin << "\n";
     // If left child is not a null node (empty tree), traverse left
     // Only traverse the number of nodes we need to (limit)
     if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
