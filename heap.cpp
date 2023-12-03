@@ -16,13 +16,13 @@ public:
     vector<pair<float, string>> heapVector;
     int currSize = 0; // Will be updated in insert and extract!
     void printTop(); // Helps with printing just 100!
-    const int top = 100; 
+    const int top = 100;
 
 private:
     void heapifyDown(int index);
 };
 
-// REF: Heapify pseudo used via lecture slides (COP3530 University of Florida Fall 2023) (edited to be max heap)
+// REF: Heapify pseudo used via lecture slides (COP3530 University of Florida Fall 2023) (edited to be max heap) and via: https://www.geeksforgeeks.org/building-heap-from-array/
 void Heap::heapifyDown(int index)
 {
     int size = currSize;
@@ -40,10 +40,12 @@ void Heap::heapifyDown(int index)
     if(heapVector[largest].first < heapVector[rightChild].first && heapVector[rightChild].first >= heapVector[leftChild].first)
         largest = rightChild;
 
-    // Call heapify down on the index again!
-    if(largest != index) {
-        // Swap largest and current!
+    // Call heapify down on the index again but only if largest and index are not ==!
+    if(largest != index)
+    {
+        // Now swap largest and current indexes!
         swap(heapVector[index], heapVector[largest]);
+        // Recursively call on new index: (ensures that the top reaches spot 0)
         heapifyDown(index);
     }
 }
