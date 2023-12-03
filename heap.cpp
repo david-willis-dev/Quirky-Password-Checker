@@ -22,7 +22,7 @@ public:
 
 private:
     int currSize = 0; // Will be updated in insert and extract!
-    const int top = 100;
+    const int top = 10;
     int TopIndex = 0;
 };
 
