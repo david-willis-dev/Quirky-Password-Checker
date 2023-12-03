@@ -6,7 +6,9 @@
 #include <stdexcept>
 using namespace std;
 
+// s1 is the user password, s2 is the password you're comparing it to
 float jaroDistance(string s1, string s2) {
+	int passwordLength = s1.length();
 	// m is the number of matching characters
 	// t is the number of transpositions
 	// searchableDistance is the distance within which a character is considered matching
@@ -36,7 +38,7 @@ float jaroDistance(string s1, string s2) {
 	// Calculate and return the Jaro Distance
 	float jaro = 0;
 	if (m != 0)
-		jaro = (1.0 / 3) * (float(m) / s1.length() + float(m) / s2.length() + (float(m) - t/2.0) / m);
+		jaro = (1.0 / 2) * (float(m) / passwordLength + float(m - t / 2.0) / m);
 	return jaro;
 }
 

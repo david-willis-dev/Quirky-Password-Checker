@@ -3,7 +3,7 @@
 #include <string>
 #include <queue>
 using namespace std;
-#define MAX_LIMIT 100
+#define MAX_LIMIT 10
 
 class RBTree {
     struct Node {
