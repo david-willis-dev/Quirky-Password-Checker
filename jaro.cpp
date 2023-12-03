@@ -36,7 +36,7 @@ float getQuirkScore(string password, string mostSimilar, int mostSimilarPosition
 	quirkScore += positionScore;
 	quirkScore += jaroScore;
 	quirkScore += lengthScore;
-	return quirkScore;
+	return 100 / 19 * quirkScore;
 }
 
 double scoreLength(string password) {

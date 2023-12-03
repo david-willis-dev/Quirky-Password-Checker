@@ -56,6 +56,19 @@ void redBlackTree(string* passwordArray, string password)
     t = clock() - t;
     float cr = (float)t/CLOCKS_PER_SEC;
     cout << "It took " << t << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr << " seconds)" << endl;
+    string mostSimilar;
+    int mostSimilarPos;
+    myTree.getTop(mostSimilar, mostSimilarPos);
+    float quirkScore = getQuirkScore(password, mostSimilar, mostSimilarPos);
+    cout << "Quirky Score: " << quirkScore << endl;
+    if(quirkScore < 25)
+	cout << "Blech, your password is not quirky at all!" << endl;
+    else if(quirkScore < 50)
+	cout << "uhh your password is kinda quirky, I guess..." << endl;
+    else if (quirkScore < 75)
+	cout << "Wow uhm, I really like how quirky and unique your password is *blush*" << endl;
+    else
+	cout << "WOWZA! What a quirky Password! Where'd you get a password like that???" << endl;
     cout << "===========================" << endl;
     //printf ("It took me %d clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
     myTree.reverseInOrder();
@@ -73,6 +86,16 @@ void maxHeap(string* passwordArray, string password)
     t = clock() - t;
     float cr = (float)t/CLOCKS_PER_SEC;
     cout << "It took " << t << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr << " seconds)" << endl;
+    float quirkScore = getQuirkScore(password, myHeap., myHeap.getTopIndex());
+    cout << "Quirky Score: " << quirkScore << endl;
+    if(quirkScore < 25)
+	cout << "Blech, your password is not quirky at all!" << endl;
+    else if(quirkScore < 50)
+	cout << "uhh your password is kinda quirky, I guess..." << endl;
+    else if (quirkScore < 75)
+	cout << "Wow uhm, I really like how quirky and unique your password is *blush*" << endl;
+    else
+	cout << "WOWZA! What a quirky Password! Where'd you get a password like that???" << endl;
     cout << "===========================" << endl;
     myHeap.printTop();
     // cout << "File Index of top: " << myHeap.getTopIndex() << endl;
