@@ -16,6 +16,7 @@ public:
     vector<pair<float, string>> heapVector;
     int currSize = 0; // Will be updated in insert and extract!
     void printTop(); // Helps with printing just 100!
+    const int top = 100; 
 
 private:
     void heapifyDown(int index);
@@ -99,7 +100,6 @@ void Heap::printTop()
     makeHeap();
     // Counter keeps track of which printed
     int counter = 1;
-    int top = 100; // Can be edited depending on how many to print
 
     // Only loop for the top 100
     for(int i = 0; i < top; i++)
