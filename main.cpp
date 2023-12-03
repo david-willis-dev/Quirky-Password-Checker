@@ -55,7 +55,9 @@ void redBlackTree(string* passwordArray, string password)
 		myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i]);
 	t = clock() - t;
 	cout << "Tree Filled" << endl;
-	cout << "It took " << t << " clicks" << endl;
+	float cr = (float)t/CLOCKS_PER_SEC;
+	cout << "It took " << t << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr << " seconds)" << endl;
+	//printf ("It took me %d clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
 	myTree.reverseInOrder();
 }
 void hashMap(string* passwordArray, string password)
