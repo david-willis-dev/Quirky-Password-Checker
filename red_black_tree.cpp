@@ -3,7 +3,7 @@
 #include <string>
 // #include <queue>
 using namespace std;
-#define MAX_LIMIT 10
+#define MAX_LIMIT 100
 
 class RBTree {
     struct Node {
@@ -50,10 +50,19 @@ class RBTree {
     // Deconstructor Helper Function
     // void deleteTree(Node* n);
     // Main Methods
+    // Inserts new node into tree
     void insert(const float& jaroVal, const string& pass, const int& origin);
+    // Balances tree after insertion
     void treeUpkeep(Node* n);
+    // Performs left rotate at node
     void leftRotate(Node* n);
+    // Performs right rotate at node
     void rightRotate(Node* n);
+    // Returns password and its origin index for quirk score calculations
+    void getTop(string& pass, int& origin) {
+        pass = root->pass;
+        origin = root->origin;
+    }
     // Silly Functions
     // void levelPrint();
     void reverseInOrder();
