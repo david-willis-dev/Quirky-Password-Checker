@@ -8,18 +8,22 @@ using namespace std;
 class Heap
 {
 public:
+    vector<pair<float, pair<string, int>>> heapVector; // The vector used
+
     // Constructor:
     Heap(){}
+    void heapifyDown(int index);
     void makeHeap();
     void extractMax();
-    void insert(float jaroVal, string pass);
-    vector<pair<float, string>> heapVector;
-    int currSize = 0; // Will be updated in insert and extract!
+    void insert(float jaroVal, string pass, const int fileIndex);
     void printTop(); // Helps with printing just 100!
-    const int top = 100;
+    void setTopIndex(int TopIndex_); // Sets the top extracted max's fileIndex to the TopIndex
+    int getTopIndex(); // Retrieves the TopIndex for calculation
 
 private:
-    void heapifyDown(int index);
+    int currSize = 0; // Will be updated in insert and extract!
+    const int top = 100;
+    int TopIndex = 0;
 };
 
 // REF: Heapify pseudo used via lecture slides (COP3530 University of Florida Fall 2023) (edited to be max heap) and via: https://www.geeksforgeeks.org/building-heap-from-array/
@@ -64,7 +68,7 @@ void Heap::makeHeap()
 void Heap::extractMax()
 {
     // Print out the jaroVal, password
-    cout << heapVector[0].first << ", " << heapVector[0].second << endl;
+    cout << heapVector[0].first << ", " << heapVector[0].second.first << endl;
     // Now copy the last value into the first:
     heapVector[0] = heapVector[currSize];
     // Decrement current size
@@ -74,11 +78,12 @@ void Heap::extractMax()
 }
 
 // Insert a new node into the heap with an integer jaroVal and password string <int, string>
-// REF: Based on slides (COP3530 University of Florida Fall 2023)! :]
-void Heap::insert(float jaroVal, string pass)
+// REF: Insert based on slides (COP3530 University of Florida Fall 2023)! :]
+void Heap::insert(float jaroVal, string pass, const int fileIndex)
 {
-    // Insert new pair at end of array with child index of size - 1: and update the size:
-    heapVector.emplace_back(jaroVal,pass);
+    // Emplace back new pair, including the jaroVal, and then the pair of password and fileIndex of that password: and update the size:
+    // The fileIndex is used to get the calculation of the "quirky score" of the password, relative to the location of the closest password in the original input.
+    heapVector.emplace_back(jaroVal, make_pair(pass, fileIndex));
     currSize++;
 
     int child = heapVector.size() - 1;
@@ -103,6 +108,8 @@ void Heap::printTop()
     // Counter keeps track of which printed
     int counter = 1;
 
+    setTopIndex(heapVector[0].second.second + 1); // This sets the topIndex of the file (used for calculations) BEFORE extract max!
+
     // Only loop for the top 100
     for(int i = 0; i < top; i++)
     {
@@ -110,6 +117,14 @@ void Heap::printTop()
         extractMax();
         counter++;
     }
+}
+
+void Heap::setTopIndex(int TopIndex_) {
+    TopIndex = TopIndex_;
+}
+
+int Heap::getTopIndex() {
+    return TopIndex;
 }
 
 // Temporary main: will be commented out!
