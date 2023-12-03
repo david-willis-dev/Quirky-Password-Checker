@@ -47,11 +47,12 @@ string* readFile(string filename)
 void redBlackTree(string* passwordArray, string password)
 {
     clock_t t;
+    int origin = 0;
     cout << "Red - Black Tree" << endl;
     t = clock();
     RBTree myTree;
     for(int i = 0; i < MAX_SIZE; i++)
-        myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i]);
+        myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], ++origin);
     t = clock() - t;
     float cr = (float)t/CLOCKS_PER_SEC;
     cout << "It took " << t << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr << " seconds)" << endl;
