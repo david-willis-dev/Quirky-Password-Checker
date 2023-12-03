@@ -36,6 +36,8 @@ float getQuirkScore(string password, string mostSimilar, int mostSimilarPosition
 	quirkScore += positionScore;
 	quirkScore += jaroScore;
 	quirkScore += lengthScore;
+	if (scoreJaro(password, mostSimilar) >= 1)
+		quirkScore /= 100;
 	return 100 / 19 * quirkScore;
 }
 
