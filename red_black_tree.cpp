@@ -1,7 +1,7 @@
 // REF: Understanding of red black tree via: https://www.programiz.com/dsa/red-black-tree
 #include <iostream>
 #include <string>
-#include <queue>
+// #include <queue>
 using namespace std;
 #define MAX_LIMIT 10
 
@@ -13,6 +13,8 @@ class RBTree {
         float jaroVal;
         // The Value is the given Password
         string pass;
+        // The original position in the passwords text file
+        int origin;
         // Red = true, Black = false
         bool color;
         // Keep track of Left, Right, and Parent nodes
@@ -25,9 +27,10 @@ class RBTree {
             color = false;
             parent = left = right = nullptr;
         }
-        Node(float jaroVal, string pass) {
+        Node(float jaroVal, string pass, int origin) {
             this->jaroVal = jaroVal;
             this->pass = pass;
+            this->origin = origin;
             // Always Insert as a Red Node
             color = true;
             parent = nullptr;
@@ -38,16 +41,21 @@ class RBTree {
     // Attached to nodes with 0/1 children
     Node* nullNode;
     // Keeps track of current size of tree
-    unsigned int size;
+    unsigned int size = 0;
     public:
     // Default Constructor
     RBTree();
-    void insert(const float& jaroVal, const string& pass);
+    // Deconstructor
+    // ~RBTree();
+    // Deconstructor Helper Function
+    // void deleteTree(Node* n);
+    // Main Methods
+    void insert(const float& jaroVal, const string& pass, const int& origin);
     void treeUpkeep(Node* n);
     void leftRotate(Node* n);
     void rightRotate(Node* n);
-    // Silly Function
-    void levelPrint();
+    // Silly Functions
+    // void levelPrint();
     void reverseInOrder();
     void reverseInOrderHelper(Node* n, int& count, int& limit);
 };
@@ -58,12 +66,41 @@ RBTree::RBTree() {
     size = 0;
 }
 
+/*
+RBTree::~RBTree() {
+    deleteTree(root);
+    delete nullNode;
+    cout << "Deconstructed!" << endl;
+}
+*/
+
+/*
+void RBTree::deleteTree(Node* n) {
+    if(!root) return;
+    if(size == 1)
+    {
+        delete n;
+        size--;
+        return;
+    }
+
+    if(n->left != nullNode && n->left) {
+        deleteTree(n->left);
+    }
+    if(n->right != nullNode && n->right) {
+        deleteTree(n->right);
+    }
+    --size;
+    delete n;
+}
+*/
+
 // Insert a new node into the tree, and upkeep (balance) as needed
-void RBTree::insert(const float& jaroVal, const string& pass) {
+void RBTree::insert(const float& jaroVal, const string& pass, const int& origin) {
     // Update size of tree
     ++size;
     // Create new leaf node
-    Node* n = new Node(jaroVal, pass);
+    Node* n = new Node(jaroVal, pass, origin);
     // Assign children as null node
     n->left = n->right = nullNode;
     // If root doesn't exist, assign n as new root
@@ -254,7 +291,7 @@ void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
     if(n->right != nullNode && count <= limit) reverseInOrderHelper(n->right, count, limit);
     // Print nodes current count, password, and jaro value
     // Only print as many as specified by limit
-    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << "\n";
+    if(++count <= limit) cout << count << ": " << n->pass << ", " << n->jaroVal << ", origin: " << n->origin << "\n";
     // If left child is not a null node (empty tree), traverse left
     // Only traverse the number of nodes we need to (limit)
     if(n->left != nullNode && count <= limit) reverseInOrderHelper(n->left, count, limit);
@@ -265,14 +302,15 @@ void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit) {
 int main() {
     // Set precision to 5 decimal points to ensure no duplicate jaro's
     RBTree myTree;
-    myTree.insert(5.5, "a");
-    myTree.insert(4.0, "b");
-    myTree.insert(3.5, "c");
-    myTree.insert(3.0, "d");
-    myTree.insert(2.5, "e");
-    myTree.insert(2.0, "f");
-    myTree.levelPrint();
+    myTree.insert(5.5, "a", -1);
+    myTree.insert(4.0, "b", -1);
+    myTree.insert(3.5, "c", -1);
+    myTree.insert(3.0, "d", -1);
+    myTree.insert(2.5, "e", -1);
+    myTree.insert(2.0, "f", -1);
+    // myTree.levelPrint();
     myTree.reverseInOrder();
+    // myTree.~RBTree();
     return 0;
 }
 */
