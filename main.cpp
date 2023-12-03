@@ -76,6 +76,7 @@ void maxHeap(string* passwordArray, string password)
     cout << "===========================" << endl;
     myHeap.printTop();
     // cout << "File Index of top: " << myHeap.getTopIndex() << endl;
+    // cout << myHeap.getTopPassword() << endl;
 }
 
 // Menu implementation: User input will be handled within here as well:
