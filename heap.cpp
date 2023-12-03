@@ -16,7 +16,7 @@ public:
     vector<pair<float, string>> heapVector;
     int currSize = 0; // Will be updated in insert and extract!
     void printTop(); // Helps with printing just 100!
-    const int top = 100;
+    const int top = 10;
 
 private:
     void heapifyDown(int index);
