@@ -68,12 +68,13 @@ void maxHeap(string* passwordArray, string password)
     t = clock();
     Heap myHeap;
     for(int i = 0; i < MAX_SIZE; i++)
-        myHeap.insert(jaroDistance(password, passwordArray[i]), passwordArray[i]);
+        myHeap.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], i);
     t = clock() - t;
     float cr = (float)t/CLOCKS_PER_SEC;
     cout << "It took " << t << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr << " seconds)" << endl;
     cout << "===========================" << endl;
     myHeap.printTop();
+    // cout << "File Index of top: " << myHeap.getTopIndex() << endl;
 }
 
 // Menu implementation: User input will be handled within here as well:
