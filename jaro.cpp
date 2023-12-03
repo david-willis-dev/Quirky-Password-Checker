@@ -65,7 +65,6 @@ stringComparison::stringComparison(string headString, string secondaryString) {
 	unordered_set<int> matchedIndices;
 	int greatestIndex = min(s1.length(), s2.length() + searchableDistance);
 	// This is the execution of the algorithm
-	cout << "greatestIndex: " << greatestIndex << endl;
 	for(int i = 0; i < greatestIndex; i++) {
 		// Test to see if there is a match
 		// Find the first unique match
@@ -80,8 +79,6 @@ stringComparison::stringComparison(string headString, string secondaryString) {
 			}
 		}
 	}
-	cout << "Num matches: " << numMatches << endl;
-	cout << "Num transpositions: " << numTranspositions << endl;
 }
 
 float stringComparison::jaroDist() {
@@ -134,7 +131,6 @@ float scoreSet(string password) {
 		setScore++;
 	if(variance >= 0.1)
 		setScore++;
-	cout << "Variance: " << variance << endl;
 	return float(setScore) * 3/2;
 }
 
