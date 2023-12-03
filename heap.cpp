@@ -17,13 +17,16 @@ public:
     void extractMax();
     void insert(float jaroVal, string pass, const int fileIndex);
     void printTop(); // Helps with printing just 100!
-    void setTopIndex(int TopIndex_); // Sets the top extracted max's fileIndex to the TopIndex
-    int getTopIndex(); // Retrieves the TopIndex for calculation
+    void setTopIndex(int topIndex_); // Sets the top extracted max's fileIndex to the topIndex
+    int getTopIndex(); // Retrieves the topIndex for calculation
+    void setTopPassword(string topPassword_); // Retrieves the topPassword (for quirky calculation)
+    string getTopPassword(); // Retrieves topPassword
 
 private:
     int currSize = 0; // Will be updated in insert and extract!
-    const int top = 10;
-    int TopIndex = 0;
+    const int top = 100;
+    int topIndex = 0;
+    string topPassword = "";
 };
 
 // REF: Heapify pseudo used via lecture slides (COP3530 University of Florida Fall 2023) (edited to be max heap) and via: https://www.geeksforgeeks.org/building-heap-from-array/
@@ -109,6 +112,7 @@ void Heap::printTop()
     int counter = 1;
 
     setTopIndex(heapVector[0].second.second + 1); // This sets the topIndex of the file (used for calculations) BEFORE extract max!
+    setTopPassword(heapVector[0].second.first);
 
     // Only loop for the top 100
     for(int i = 0; i < top; i++)
@@ -119,14 +123,22 @@ void Heap::printTop()
     }
 }
 
-void Heap::setTopIndex(int TopIndex_) 
-{
-    TopIndex = TopIndex_;
+void Heap::setTopIndex(int topIndex_) {
+    topIndex = topIndex_;
 }
 
-int Heap::getTopIndex() 
+int Heap::getTopIndex() {
+    return topIndex;
+}
+
+void Heap::setTopPassword(string topPassword_)
 {
-    return TopIndex;
+    topPassword = topPassword_;
+}
+
+string Heap::getTopPassword()
+{
+    return topPassword;
 }
 
 // Temporary main: will be commented out!
