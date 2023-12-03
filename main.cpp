@@ -86,7 +86,7 @@ void maxHeap(string* passwordArray, string password)
     t = clock() - t;
     float cr = (float)t/CLOCKS_PER_SEC;
     cout << "It took " << t << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr << " seconds)" << endl;
-    float quirkScore = getQuirkScore(password, myHeap., myHeap.getTopIndex());
+    float quirkScore = getQuirkScore(password, myHeap.getTopPassword(), myHeap.getTopIndex());
     cout << "Quirky Score: " << quirkScore << endl;
     if(quirkScore < 25)
 	cout << "Blech, your password is not quirky at all!" << endl;
