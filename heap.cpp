@@ -140,22 +140,3 @@ string Heap::getTopPassword()
 {
     return topPassword;
 }
-
-// Temporary main: will be commented out!
-// int main()
-// {
-//     Heap heap;
-//     heap.insert(1.10, "howdy");
-//     heap.insert(2.50, "john");
-//     heap.insert(5.20, "billy");
-//     heap.insert(6.30, "password");
-//     heap.insert(8.40, "letmein");
-//     heap.insert(80.30, "bob");
-//     heap.insert(30.45, "josh");
-//     heap.insert(10.30, "bilbo");
-//     heap.insert(11.20, "harry");
-//     heap.insert(23.10, "joshua");
-//     heap.printTop();
-
-//     return 0;
-// }
