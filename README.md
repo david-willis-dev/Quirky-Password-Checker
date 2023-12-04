@@ -2,7 +2,7 @@
 ## Problem:
 ### Is your password not like other passwords? Find out how secure/unique/quirky your password is in comparison to a dataset of 100,000+ most used passwords based off of the Jaro-Algorithm for determining string similarity.
 ## Features: 
-### A list will be returned containing the 10 most similar results to your password, as well as their Jaro score, and where your password ranks among the most commonly used passwords. There will also be a list that returns the computational runtime of each data structure, as well as a general comparison word (ie: “quirky” or “unoriginal”) decided upon by the uniqueness score (based upon various calculations using the jaro value as well as usage of special characters, numbers, capital letters).
+### A list will be returned containing the 10 most similar results to your password, as well as their Jaro score, and where your password ranks among the most commonly used passwords. There will also be a list that returns the computational runtime of each data structure, as well as a general comparison word (ie: “quirky” or “unoriginal”) decided upon by the uniqueness score (based upon various calculations using the jaro value as well as position of most similar password in dataset).
 ## Data:
 ### We are using a data list of the most common passwords, sorted by frequency featured in the link below: https://lucidar.me/en/security/list-of-100000-most-common-passwords/
 ## Strategy:
