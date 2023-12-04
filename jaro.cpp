@@ -7,64 +7,60 @@
 #include <algorithm>
 #include <unordered_set>
 #include <fstream>
-#include <stdexcept>
-#include <vector>
 #include <cctype>
 using namespace std;
 
-class stringComparison {
+// This class is made to generate statistics about the relation between two passwords
+class passwordRater {
+
 	public:
-		int numTranspositions = 0, numMatches = 0;
-		string headString, secondaryString;
-		stringComparison(string headString, string secondaryString);
+		passwordRater(string mainPassword, string mostSimilar, int mostSimilarPosition);
 		float jaroDist();
-		float quirkDist();
+		float getQuirkScore();
+
+	private:
+		// Used for Jaro/Quirk Distance
+		int numTranspositions = 0, numMatches = 0;
 		
+		// Security factors, Used for generating the QuirkScore
+		string leastUsedCharType;
+		int setScore = 0, positionScore = 0, quirkoScore = 0, lengthScore = 0, mostSimilarPosition = 0;;
+
+		// Password and most common similar string
+		string mainPassword, mostSimilar;
+		
+		// Private Methods
+		float quirkDist();
+		double scoreLength();
+		float scoreSet();
+		double scorePosition();
 };
 
-double scoreLength(string password);
-double scoreJaro(string password, string secondary);
-float scoreSet(string password);
-double scorePosition(int position);
-float jaroDistance(string s1, string s2);
-float getQuirkScore(string password, string mostSimilar, int mostSimilarPosition);
-
-float getQuirkScore(string password, string mostSimilar, int mostSimilarPosition) {
-	double positionScore = scorePosition(mostSimilarPosition);
-	int setScore = scoreSet(password);
-	stringComparison passCompare(password, mostSimilar);
-	float jaroScore = scoreJaro(password, mostSimilar);
-	double lengthScore = scoreLength(password);
+// The quirk score represents how unique and secure a password is
+float passwordRater::getQuirkScore() {
 	double quirkScore = 0;
 	quirkScore += setScore;
 	quirkScore += positionScore;
-	quirkScore += jaroScore;
+	quirkScore += quirkoScore;
 	quirkScore += lengthScore;
-	if (scoreJaro(password, mostSimilar) >= 1)
+	if (jaroDist() >= 1)
 		quirkScore /= 100;
 	return 100 / 19 * quirkScore;
 }
 
-double scoreLength(string password) {
-	return password.length() * 0.25 - 1;
-}
-
-double scoreJaro(string password, string s2) {
-	stringComparison compare(password, s2);
-	return 4 * (1 - compare.quirkDist());
-}
-
-stringComparison::stringComparison(string headString, string secondaryString) {
-	this->headString = headString;
-	this->secondaryString = secondaryString;
-	int passwordLength = headString.length();
+// This password runs the Jaro algorithm and computes each security factor's score
+passwordRater::passwordRater(string mainPassword, string mostSimilar, int mostSimilarPosition) {
+	this->mainPassword = mainPassword;
+	this->mostSimilar = mostSimilar;
+	this->mostSimilarPosition = mostSimilarPosition;
+	int passwordLength = mainPassword.length();
 	// m is the number of matching characters
 	// t is the number of transpositions
 	// searchableDistance is the distance within which a character is considered matching
 	int searchableDistance;
 	// s1 will always be longer than s2
-	string s1 = headString, s2 = secondaryString;
-	if (headString.length() < secondaryString.length())
+	string s1 = mainPassword, s2 = mostSimilar;
+	if (mainPassword.length() < mostSimilar.length())
 		swap(s1, s2);
 	searchableDistance = (s1.length() / 2) - 1;
 	// Any characters counted in a match can only be counted once, so we keep track of them in a set
@@ -85,35 +81,47 @@ stringComparison::stringComparison(string headString, string secondaryString) {
 			}
 		}
 	}
+	positionScore = scorePosition();
+	setScore = scoreSet();
+	quirkoScore = 4 * (1 - quirkDist());
+	lengthScore = scoreLength();
+	
 }
 
-float stringComparison::jaroDist() {
+// The longer the password, the greater the length score
+double passwordRater::scoreLength() {
+	return mainPassword.length() * 0.25 - 1;
+}
+
+// This returns the Jaro algorithm's distance, or the similarity score
+float passwordRater::passwordRater::jaroDist() {
 	// Calculate and return the Jaro Distance
 	float jaro = 0;
 	if (numMatches != 0) {
-		jaro = float(numMatches) / headString.length();
-		jaro += float(numMatches) / secondaryString.length();
+		jaro = float(numMatches) / mainPassword.length();
+		jaro += float(numMatches) / mostSimilar.length();
 		jaro += float(numMatches - numTranspositions / 2.0) / numMatches;
 		jaro /= 3;
 	}
 	return jaro;
 }
 
-float stringComparison::quirkDist() {
+// This method returns a modified version of the jaro distance made for passwords
+float passwordRater::quirkDist() {
 	// Calculate and return the Quirky distance
 	float dist = 0;
 	if(numMatches != 0) {
-		dist = 3 * float(numMatches) / headString.length();
+		dist = 3 * float(numMatches) / mainPassword.length();
 		dist += float(numMatches - numTranspositions) / numMatches;
 		dist /= 4;
 	}
 	return dist;
 }
 
-
-float scoreSet(string password) {
+// This method returns a score based on the variance of the character sets used in the password
+float passwordRater::scoreSet() {
 	int setScore = 0, numLower = 0, numUpper = 0, numSpecial = 0, numNumber = 0;
-	for(char c : password) {
+	for(char c : mainPassword) {
 		if(islower(c))
 			numLower++;
 		else if(isupper(c))
@@ -132,7 +140,7 @@ float scoreSet(string password) {
 	int leastOccurringSet = min(numLower, numUpper);
 	leastOccurringSet = min(leastOccurringSet, numSpecial);
 	leastOccurringSet = min(leastOccurringSet, numNumber);
-	float variance = float(leastOccurringSet) / password.length();
+	float variance = float(leastOccurringSet) / mainPassword.length();
 	if (variance >= 0.05)
 		setScore++;
 	if(variance >= 0.1)
@@ -140,48 +148,12 @@ float scoreSet(string password) {
 	return float(setScore) * 3/2;
 }
 
-double scorePosition(int position) {
+// This method returns a score based on how common the most similar password is
+double passwordRater::scorePosition() {
 	int score = 0;
-	if(position > 25000)
+	if(mostSimilarPosition > 25000)
 		score += 1;
-	if(position > 50000)
+	if(mostSimilarPosition > 50000)
 		score += 1;
 	return score;
 }
-
-// s1 is the user password, s2 is the password you're comparing it to
-float jaroDistance(string s1, string s2) {
-	stringComparison comparison(s1, s2);
-	return comparison.jaroDist();
-}
-
-/*
-int main() {
-	fstream inputFile("input2.txt", fstream::in);
-	if(!inputFile.is_open())
-		throw runtime_error("File not opened correctly");
-	//Get the strings from the input file
-	string s1, s2;
-	getline(inputFile, s1);
-	getline(inputFile, s2);
-	double positionScore = scorePosition(26000);
-	int setScore = scoreSet(s1);
-	stringComparison passCompare(s1, s2);
-	float jaroScore = scoreJaro(s1, s2);
-	double lengthScore = scoreLength(s1);
-	cout << "Distance between the strings: " << passCompare.jaroDist() << endl;
-	cout << "Quirk Distance: " << passCompare.quirkDist() << endl;
-	cout << "Position Score: " << positionScore << "/2" << endl;
-	cout << "Set Score: " << setScore << "/9" << endl;
-	cout << "Jaro Score: " << jaroScore << "/4" << endl;
-	cout << "Length Score: " << lengthScore << "/4" << endl;
-	double quirkScore =0;
-	//quirkScore += scoreLength(s1);
-	//quirkScore += scoreJaro(s1);
-	quirkScore += setScore;
-	quirkScore += positionScore;
-	quirkScore += jaroScore;
-	quirkScore += lengthScore;
-	cout << "Score is: " << quirkScore << endl;
-}
-*/
