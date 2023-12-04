@@ -48,9 +48,10 @@ void redBlackTree(string* passwordArray, string password)
     RBTree myTree;
     
     // Ensure that we only insert up to max size (100,000) defined at top of main!
-    for(int i = 0; i < MAX_SIZE; i++)
-        myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], ++topindex);
-    
+    for(int i = 0; i < MAX_SIZE; i++) {
+	passwordRater comparison(password, passwordArray[i], i);
+        myTree.insert(comparison.jaroDist(), passwordArray[i], ++topindex);
+    }
     t_redBlack = clock() - t_redBlack;
     float cr_redBlack = (float)t_redBlack/CLOCKS_PER_SEC; // Click rate of red-black tree
     cout << "Time it took: " << endl;
@@ -60,9 +61,10 @@ void redBlackTree(string* passwordArray, string password)
     t_maxHeap = clock();
     Heap myHeap;
     
-    for(int i = 0; i < MAX_SIZE; i++)
-        myHeap.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], i);
-    
+    for(int i = 0; i < MAX_SIZE; i++) {
+	passwordRater comparison(password, passwordArray[i], i);
+        myHeap.insert(comparison.jaroDist(), passwordArray[i], i);
+    }
     t_maxHeap = clock() - t_maxHeap;
     float cr_maxHeap = (float)t_maxHeap/CLOCKS_PER_SEC; // Click rate of max heap
     cout << "Max Heap: " << t_maxHeap << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr_maxHeap << " seconds)" << endl;
@@ -78,8 +80,8 @@ void redBlackTree(string* passwordArray, string password)
     string mostSimilar;
     int mostSimilarPos;
     myTree.getTop(mostSimilar, mostSimilarPos);
-
-    float quirkScore = getQuirkScore(password, mostSimilar, mostSimilarPos);
+    passwordRater mainComparison(password, mostSimilar, mostSimilarPos);
+    float quirkScore = mainComparison.getQuirkScore();
     cout << "Quirky Score: " << quirkScore << endl;
     if(quirkScore < 25)
         cout << "Blech, your password is not quirky at all!" << endl;
@@ -107,9 +109,10 @@ void maxHeap(string* passwordArray, string password)
     Heap myHeap;
     
     // Ensure that we only insert up to max size (100,000) defined at top of main!
-    for(int i = 0; i < MAX_SIZE; i++)
-        myHeap.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], i);
-    
+    for(int i = 0; i < MAX_SIZE; i++) {
+	passwordRater comparison(password, passwordArray[i], i);
+        myHeap.insert(comparison.jaroDist(), passwordArray[i], i);
+    }
     t_maxHeap = clock() - t_maxHeap;
     float cr_maxHeap = (float)t_maxHeap/CLOCKS_PER_SEC; // Click rate of max heap
     cout << "Time it took: " << endl;
@@ -119,9 +122,10 @@ void maxHeap(string* passwordArray, string password)
     t_redBlack = clock();
     RBTree myTree;
     
-    for(int i = 0; i < MAX_SIZE; i++)
-        myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], 0);
-    
+    for(int i = 0; i < MAX_SIZE; i++) {
+	passwordRater comparison(password, passwordArray[i], i);
+        myTree.insert(comparison.jaroDist(), passwordArray[i], 0);
+    }
     t_redBlack = clock() - t_redBlack;
     float cr_redBlack = (float)t_redBlack/CLOCKS_PER_SEC; // Click rate of red-black tree
     cout << "Red-Black Tree: " << t_redBlack << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr_redBlack << " seconds)" << endl;
@@ -134,7 +138,8 @@ void maxHeap(string* passwordArray, string password)
     cout << "---------------------------" << endl;
 
     // Calculate the quirky score:
-    float quirkScore = getQuirkScore(password, myHeap.getTopPassword(), myHeap.getTopIndex());
+    passwordRater mainComparison(password, myHeap.getTopPassword(), myHeap.getTopIndex());
+    float quirkScore = mainComparison.getQuirkScore();
     cout << "Quirky Score: " << quirkScore << endl;
     if(quirkScore < 25)
         cout << "Blech, your password is not quirky at all!" << endl;
