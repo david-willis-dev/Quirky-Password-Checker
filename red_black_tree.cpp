@@ -208,21 +208,22 @@ void RBTree::treeUpkeep(Node* n)
 // Left Rotate:
 void RBTree::leftRotate(Node* n)
 {
-    // Store right child node of n
     Node* child = n->right;
     // Reassign child node's parent as n's parent (grandparent node)
     child->parent = n->parent;
-    // If nullptr, then reassign root as child
+    
+    // Determining if n's parent exists, and if so, whether it's the right or left child of its parent
+    // If n's parent is nullptr, then n is the root, so reassign the root to the child node
     if(n->parent == nullptr)
         root = child;
-    // If n is left child of its parent, parent's left child is now the child node
+    // Child node becomes new child of grandparent node
     else if(n->parent->left == n)
         n->parent->left = child;
-    // If n is right child of its parent, parent's right child is now the child node
-    else n->parent->right = child;
-    // n's parent is now child
+    else 
+        n->parent->right = child;
+    
     n->parent = child;
-    // If it wasn't empty, the left subtree's parent is now n
+    // If the child node's left subtree was not empty, assign its parent as n
     if(child->left != nullNode)
         child->left->parent = n;
     // n's right subtree is now child's left
@@ -234,21 +235,22 @@ void RBTree::leftRotate(Node* n)
 // Right Rotate:
 void RBTree::rightRotate(Node* n)
 {
-    // Store left child node of n
     Node* child = n->left;
     // Reassign child node's parent as n's parent (grandparent node)
     child->parent = n->parent;
+
+    // Determining if n's parent exists, and if so, whether it's the right or left child of its parent
+    // If n's parent is nullptr, then n is the root, so reassign the root to the child node
     if(n->parent == nullptr)
         root = child;
-    // If n is right child of its parent, parent's right child is swapped
+    // Child node becomes new child of grandparent node
     else if(n->parent->right == n)
         n->parent->right = child;
-    // Otherwise swap left and child
     else
         n->parent->left = child;
-    // n's parent is now child
+
     n->parent = child;
-    // If it wasn't empty, the right subtree's parent is now n
+    // If the child node's right subtree was not empty, assign its parent as n
     if(child->right != nullNode)
         child->right->parent = n;
     // n's left subtree is now child's right
