@@ -1,3 +1,7 @@
+// References:
+// https://www.youtube.com/watch?v=s0YSKiFdj8Q&t=916s
+// https://www.geeksforgeeks.org/jaro-and-jaro-winkler-similarity/#
+// https://stackoverflow.com/questions/32439453/is-there-an-existing-algorithm-in-checking-password-strength-or-re-invent-the-w
 #include <string>
 #include <iostream>
 #include <algorithm>
@@ -42,7 +46,7 @@ float getQuirkScore(string password, string mostSimilar, int mostSimilarPosition
 }
 
 double scoreLength(string password) {
-	return password.length() / 4 - 1;
+	return password.length() * 0.25 - 1;
 }
 
 double scoreJaro(string password, string s2) {
