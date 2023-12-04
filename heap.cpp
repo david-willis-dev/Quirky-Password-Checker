@@ -123,11 +123,13 @@ void Heap::printTop()
     }
 }
 
-void Heap::setTopIndex(int topIndex_) {
+void Heap::setTopIndex(int topIndex_) 
+{
     topIndex = topIndex_;
 }
 
-int Heap::getTopIndex() {
+int Heap::getTopIndex() 
+{
     return topIndex;
 }
 
