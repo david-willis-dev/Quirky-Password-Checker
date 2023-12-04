@@ -1,7 +1,6 @@
 // REF: Understanding of red black tree via: https://www.programiz.com/dsa/red-black-tree
 #include <iostream>
 #include <string>
-// #include <queue>
 using namespace std;
 #define MAX_LIMIT 10
 
@@ -35,7 +34,7 @@ class RBTree {
         }
     };
     Node* root;
-    Node* nullNode; // Attached to nodes with 0/1 children: Helps keep track of leaf nodes!
+    Node* nullNode; // Attached to nodes with 0/1 children: Helps keep track of leaf nodes and empty subtrees!
     unsigned int size = 0; // Keeps track of current size of tree, initialize to 0
 
 public:
@@ -57,7 +56,6 @@ public:
 
     // Prints reverse inorder traversal of tree
     void reverseInOrder();
-    // Helper function for reverseInOrder()
     void reverseInOrderHelper(Node* n, int& count, int& limit);
 };
 
@@ -66,7 +64,6 @@ RBTree::RBTree()
 {
     nullNode = new Node;
     root = nullNode; // Assigns root as a null node
-    size = 0; // Initializes size of tree to 0
 }
 
 // Deletes each node in the tree
@@ -107,13 +104,13 @@ void RBTree::insert(const float& jaroVal, const string& pass, const int& origin)
     }
 
     Node* temp = root; // Temp node to navigate our tree and insert n in the correct spot
-    Node* parent; // Parent keeps track of the node before any child nodes
+    Node* parent; // Parent tracks behind temp node, helps temp find its parent
 
     // While we haven't reached the end of our tree
     while(temp != nullNode)
     {
         parent = temp;
-        // If temp's current value is greater than n's, traverse Left
+        // If temp's current value is greater than n's, traverse Left, else traverse Right
         if(n->jaroVal < temp->jaroVal)
             temp = temp->left;
         else
@@ -122,7 +119,7 @@ void RBTree::insert(const float& jaroVal, const string& pass, const int& origin)
     // Once we've reached our destination, update n's parent
     n->parent = parent;
 
-    // If n's value is less than its parent's, it's the left child
+    // If n's value is less than its parent's, it's the left child, else it's the right child
     if(n->jaroVal < parent->jaroVal)
         parent->left = n;
     else parent->right = n;
@@ -199,6 +196,7 @@ void RBTree::treeUpkeep(Node* n)
                 rightRotate(n->parent->parent);
             }
         }
+        // If we've reached the top of our tree (root), stop balancing
         if(n == root) break;
     }
     // Ensure root is still colored black
@@ -280,21 +278,3 @@ void RBTree::reverseInOrderHelper(Node* n, int& count, int& limit)
     if(n->left != nullNode && count <= limit)
         reverseInOrderHelper(n->left, count, limit);
 }
-
-/*
-// Main (Was used to test tree efficiency, comment out cause not needed!)
-int main() {
-    // Set precision to 5 decimal points to ensure no duplicate jaro's
-    RBTree myTree;
-    myTree.insert(5.5, "a", -1);
-    myTree.insert(4.0, "b", -1);
-    myTree.insert(3.5, "c", -1);
-    myTree.insert(3.0, "d", -1);
-    myTree.insert(2.5, "e", -1);
-    myTree.insert(2.0, "f", -1);
-    // myTree.levelPrint();
-    myTree.reverseInOrder();
-    myTree.~RBTree();
-    return 0;
-}
-*/
