@@ -36,9 +36,7 @@ string* readFile(string filename)
     }
     else
         cout << "File was not opened" << endl;
-
-//    for(int i = 0; i < 10; i++)
-//        cout << "Passsword " << i * 1000 << ": " << passwordArray[i * 1000] << endl;
+    
     return passwordArray;
 }
 
@@ -46,33 +44,37 @@ string* readFile(string filename)
 // Output the similar passwords, and only exit output if certain escape key is pressed (e?). Output calculation time until the escape was pressed.
 void redBlackTree(string* passwordArray, string password)
 {
-    clock_t t_redBlack;
-    clock_t t_maxHeap;
-    int origin = 0;
-
-    // Get the time of the red black tree: (in clicks and cps)
     cout << "Red - Black Tree" << endl;
     cout << "---------------------------" << endl;
+    
+    clock_t t_redBlack; // Time of red-black tree
+    clock_t t_maxHeap; // Time of max heap
+    int topindex = 0; // topIndex keeps track fo the index of the top Jaro value, in terms of the input.txt file's lines
     t_redBlack = clock();
     RBTree myTree;
+    
+    // Ensure that we only insert up to max size (100,000) defined at top of main!
     for(int i = 0; i < MAX_SIZE; i++)
-        myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], ++origin);
+        myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], ++topindex);
+    
     t_redBlack = clock() - t_redBlack;
-    float cr_redBlack = (float)t_redBlack/CLOCKS_PER_SEC;
+    float cr_redBlack = (float)t_redBlack/CLOCKS_PER_SEC; // Click rate of red-black tree
     cout << "Time it took: " << endl;
     cout << "Red-Black: " << t_redBlack << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr_redBlack << " seconds)" << endl;
 
     // Repeat for the max heap (to show the time difference)
     t_maxHeap = clock();
     Heap myHeap;
+    
     for(int i = 0; i < MAX_SIZE; i++)
         myHeap.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], i);
+    
     t_maxHeap = clock() - t_maxHeap;
-    float cr_maxHeap = (float)t_maxHeap/CLOCKS_PER_SEC;
+    float cr_maxHeap = (float)t_maxHeap/CLOCKS_PER_SEC; // Click rate of max heap
     cout << "Max Heap: " << t_maxHeap << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr_maxHeap << " seconds)" << endl;
 
     // Print the comparison of them!
-    if(cr_redBlack > cr_maxHeap)
+    if(t_redBlack > t_maxHeap)
         cout << "The Max Heap ran faster!" << endl;
     else
         cout << "The Red-Black tree ran faster!" << endl;
@@ -101,28 +103,33 @@ void redBlackTree(string* passwordArray, string password)
 // Max Heap:
 void maxHeap(string* passwordArray, string password)
 {
-    clock_t t_maxHeap;
-    clock_t t_redBlack;
-
     // Get the time of the max heap: (in clicks and cps)
     cout << "Max Heap" << endl;
     cout << "---------------------------" << endl;
+
+    clock_t t_maxHeap; // Time of max heap
+    clock_t t_redBlack; // Time of red-black tree
     t_maxHeap = clock();
     Heap myHeap;
+    
+    // Ensure that we only insert up to max size (100,000) defined at top of main!
     for(int i = 0; i < MAX_SIZE; i++)
         myHeap.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], i);
+    
     t_maxHeap = clock() - t_maxHeap;
-    float cr_maxHeap = (float)t_maxHeap/CLOCKS_PER_SEC;
+    float cr_maxHeap = (float)t_maxHeap/CLOCKS_PER_SEC; // Click rate of max heap
     cout << "Time it took: " << endl;
     cout << "Max Heap: " << t_maxHeap << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr_maxHeap << " seconds)" << endl;
 
     // Repeat for the red-black tree (to show the time difference)
     t_redBlack = clock();
     RBTree myTree;
+    
     for(int i = 0; i < MAX_SIZE; i++)
         myTree.insert(jaroDistance(password, passwordArray[i]), passwordArray[i], 0);
+    
     t_redBlack = clock() - t_redBlack;
-    float cr_redBlack = (float)t_redBlack/CLOCKS_PER_SEC;
+    float cr_redBlack = (float)t_redBlack/CLOCKS_PER_SEC; // Click rate of red-black tree
     cout << "Red-Black Tree: " << t_redBlack << " clicks at " << CLOCKS_PER_SEC << " cps (" << cr_redBlack << " seconds)" << endl;
 
     // Print the comparison of them!
@@ -147,8 +154,6 @@ void maxHeap(string* passwordArray, string password)
 
     // Print out the actual heap: (print top 10)
     myHeap.printTop();
-    // cout << "File Index of top: " << myHeap.getTopIndex() << endl;
-    // cout << myHeap.getTopPassword() << endl;
 }
 
 // Menu implementation: User input will be handled within here as well:
@@ -166,7 +171,7 @@ void menu(string* passwordArray)
     while (!exitProgram)
     {
         cout << "Pick your data structure (type 1 or 2):" << endl;
-        cout << "1. Red-Black Tree" << endl; /// Red-black tree is subject to change to a different structure!
+        cout << "1. Red-Black Tree" << endl; 
         cout << "2. Max Heap" << endl;
         cout << "Type any other key to exit program." << endl;
         cin >> structureChoice;
@@ -213,7 +218,7 @@ void menu(string* passwordArray)
 int main()
 {
     string* passwordArray = readFile("input.txt");
-    // Now that passwords are stored in temporary array via file, show the menu:
+    // Now that passwords are stored in a temporary array via file, show the menu/prompt input
     menu(passwordArray);
 
     return 0;
