@@ -9,7 +9,7 @@
 #define MAX_SIZE 100000
 using namespace std;
 
-// Read in the 100k passwords via the file (input.txt) and database: REF: https://lucidar.me/en/security/list-of-100000-most-common-passwords/ 
+// Read in the 100k passwords via the file (input.txt) REF: https://lucidar.me/en/security/list-of-100000-most-common-passwords/ 
 string* readFile(string filename)
 {
     // Read in input file (all the passwords) and store into an array (0 = first in txt, and array.size-1 = last)
